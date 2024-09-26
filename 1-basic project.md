@@ -88,6 +88,8 @@ should be place under
 -------------
 Syntax for code block in the HTML files:
 
+Documentation: [See Here](https://docs.djangoproject.com/en/2.0/ref/templates/builtins/)
+
 - Extend from base HTML file:
 `{% extends "blog/base.html" %}`
 - Allow to load static file, like CSS templates:

@@ -51,3 +51,70 @@ COMMIT;
 ```
 
 Then we apply the changes by `migrate`
+
+## 2.2 Interactive shell
+
+> Using `python manage.py shell` to enter interactive env
+
+first import models you need.
+```Python
+>>>from blog.models import Post
+>>>from django.contrib.auth.models import User
+
+# Query
+>>>Post.objects().all().first()
+>>>Post.objects().filter().first()
+
+#INSERT
+>>post_1 = Post()# fill attributes
+>>post_1.save()
+```
+----
+There is also an easy query set to do search
+> .modelname_set
+
+access posts by user:
+```Python
+>>> user.post_set
+```
+> In [21]: user.post_set.all()
+> Out[21]: <QuerySet [<Post: Blog 1>, <Post: Blog 2>]>
+
+Can also create new rows with association to keys:
+
+`user.post_set.create(title='Blog 3', content='Blog 3 content')`
+
+## 2.3 Query data for webpage
+
+We remove our dummy data first.
+
+in `view.py`:
+
+```Python
+from .models import Post
+
+def home(request):
+    context = {
+        'posts':Post.objects.all()
+    }
+    return render(request, 'blog/home.html',context)
+```
+
+then it's done!
+
+To format the date in templates refer to [here](https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqa3lERXNIS0s5bFQ0cFJFUHNtcDBIWm9sS2Y4UXxBQ3Jtc0ttdUNuQjI1VHBlR3BFMXFUbjhhUjA0U2ZmWVRQTVdUUHJOdFFXcGRrbjUzeER0WU1jNkpsS29xLURITF9GYUxVb0FBU0NiMmZ5akFyUURIT2Z5Mjd0U2c4dmhnY256MzZ4VnlIakRIVlJVSUtWRnFvNA&q=https%3A%2F%2Fdocs.djangoproject.com%2Fen%2F2.0%2Fref%2Ftemplates%2Fbuiltins%2F%23date&v=aHC3uTkT9r8)
+
+```HTML
+<small class="text-muted">{{ post.date_posted|date:"G:i, F d, Y" }}</small>
+```
+What it looks like:
+>6:43, September 26, 2024
+
+## 2.4 Admin Page with Database
+To add our model to admin page, we need to register them.
+
+In `admin.py`:
+```Python
+from .models import Post
+admin.site.register(Post)
+```
